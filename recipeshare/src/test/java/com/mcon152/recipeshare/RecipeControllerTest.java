@@ -66,7 +66,22 @@ class RecipeControllerTest {
                 "'Pancakes','Fluffy pancakes','1 cup flour;2 eggs;1 cup milk','Cook on skillet until golden'"
         })
         void parameterizedAddRecipeTest(String title, String description, String ingredients, String instructions) throws Exception {
-            throw new UnsupportedOperationException("parameterizedAddRecipeTest");
+            ObjectNode json = mapper.createObjectNode();
+            json.put("title", "Cake");
+            json.put("description", "Delicious cake");
+            // Change ingredients to a single String
+            json.put("ingredients", "1 cup of flour, 1 cup of sugar, 3 eggs");
+            json.put("instructions", "Mix and bake");
+            String jsonString = mapper.writeValueAsString(json);
+            mockMvc.perform(post("/api/recipes")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(jsonString))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.title").value("Cake"))
+                    .andExpect(jsonPath("$.description").value("Delicious cake"))
+                    .andExpect(jsonPath("$.ingredients").value("1 cup of flour, 1 cup of sugar, 3 eggs"))
+                    .andExpect(jsonPath("$.instructions").value("Mix and bake"))
+                    .andExpect(jsonPath("$.id").isNumber());
         }
     }
 
