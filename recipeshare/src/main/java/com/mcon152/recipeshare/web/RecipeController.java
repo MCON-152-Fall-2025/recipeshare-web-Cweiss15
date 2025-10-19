@@ -54,6 +54,7 @@ public class RecipeController {
         return null;
     }
 
+
     /**
      * Deletes a recipe by its ID.
      *
@@ -79,8 +80,14 @@ public class RecipeController {
      */
     @PutMapping("/{id}")
     public Recipe updateRecipe(@PathVariable long id, @RequestBody Recipe updatedRecipe) {
-        throw new UnsupportedOperationException("Update recipe not implemented");
-    }
+        for (int i = 0; i < recipes.size(); i++) {
+            if (recipes.get(i).getId() == id) {
+                recipes.set(i, updatedRecipe);
+                return recipes.get(i);
+            }
+        }
+        return null;
+        }
 
     /**
      * Partially updates an existing recipe by its ID.
@@ -91,6 +98,23 @@ public class RecipeController {
      */
     @PatchMapping("/{id}")
     public Recipe patchRecipe(@PathVariable long id, @RequestBody Recipe partialRecipe) {
-        throw new UnsupportedOperationException("Update recipe not implemented");
+        for (int i = 0; i < recipes.size(); i++) {
+            if (recipes.get(i).getId() == id) {
+                if (partialRecipe.getDescription()!=null) {
+                    recipes.get(i).setDescription(partialRecipe.getDescription());
+                }
+                if (partialRecipe.getIngredients()!=null) {
+                    recipes.get(i).setIngredients(partialRecipe.getIngredients());
+                }
+                if (partialRecipe.getInstructions()!=null) {
+                    recipes.get(i).setInstructions(partialRecipe.getInstructions());
+                }
+                if (partialRecipe.getTitle()!=null) {
+                    recipes.get(i).setTitle(partialRecipe.getTitle());
+                }
+                return recipes.get(i);
+            }
+        }
+        return null;
     }
-}
+    }
